@@ -1,0 +1,59 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: "3.1"
+services:
+
+    redis:
+      image: redis:alpine
+      container_name: estoque-redis
+
+    postgres:
+      image: postgres:11.1-alpine
+      container_name: estoque-postgres
+      working_dir: /application
+      volumes:
+        - .:/application
+      environment:
+        - POSTGRES_USER=root
+        - POSTGRES_PASSWORD=root
+        - POSTGRES_DB=estoque
+      ports:
+        - "8892:5432"
+      networks:
+        - postgres-compose-network
+
+    webserver:
+      image: nginx:alpine
+      container_name: estoque-webserver
+      working_dir: /application
+      volumes:
+          - ./src:/application
+          - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+       - "8888:80"
+
+    php-fpm:
+      build: phpdocker/php-fpm
+      container_name: estoque-php-fpm
+      working_dir: /application
+      volumes:
+        - ./src:/application
+        - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
+
+    teste-pgadmin-compose:
+      image: dpage/pgadmin4
+      environment:
+        PGADMIN_DEFAULT_EMAIL: "renatogroff@yahoo.com.br"
+        PGADMIN_DEFAULT_PASSWORD: "PgAdmin2019!"
+      ports:
+        - "16543:80"
+      depends_on:
+        - postgres
+      networks:
+        - postgres-compose-network
+      
+networks: 
+  postgres-compose-network:
+    driver: bridge
+
