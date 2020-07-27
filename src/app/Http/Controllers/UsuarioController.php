@@ -27,14 +27,9 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        //return view('user');
-        //echo( session($user));
         $user = session('user');
-         echo "<ol>";
-         foreach ($user as $u){
-            echo "<li>" . $u['name'] . "</li>"; 
-         }
-         echo "</ol>";
+        return view('user.index', compact(['user']));
+        
     }
 
     /**
@@ -44,8 +39,6 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-
-        //echo $user;
         return view('user.create');
 
         //      precisa ter no template
@@ -60,14 +53,16 @@ class UsuarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        $user = session('user');
+        $id_user = count($user)+1;
         $name = $request->name;
         $email = $request->email;
         $password = $request->password;
         $novo_usuario = ["name"=>$name, "email"=>$email, "password"=>$password];
-
+        $user[] = ["id_user"=>$id_user, "name"=>$name];
         //CADASTRAR
-        return redirect('user');
+        return redirect()->route('user.index');
         
     }
 
@@ -83,7 +78,6 @@ class UsuarioController extends Controller
         $user = $user[$id - 1];
         return view('user.show', compact(['user']));
         //      precisa ter no template
-        //$user
         //href="{{    route('user.show',    $variavel   )  }}"
     }
 
@@ -119,7 +113,7 @@ class UsuarioController extends Controller
         $user = session('user');
         $user[$id - 1]['name'] = $request->name;
         session(['user' => $user]);
-        return redirect()->route('user');
+        return redirect()->route('user.index');
     }
 
     /**
@@ -130,7 +124,6 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
-        //
         $user = session('user');
         $ids = array_column($user, 'id_user');
         $index = array_search($id, $ids);

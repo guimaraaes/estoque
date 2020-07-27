@@ -6,6 +6,21 @@ use Illuminate\Http\Request;
 
 class VendaController extends Controller
 {
+    private $sale = [
+        ['id_sale'=>1, 'name'=>'s1'],
+        ['id_sale'=>2, 'name'=>'s2'],
+        ['id_sale'=>3, 'name'=>'s3'],
+        ['id_sale'=>4, 'name'=>'s4']
+
+    ];
+
+    public function __construct(){
+        $sale = session('sale');
+        if (!isset($sale))
+            session(['sale' => $this->sale]);
+
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,9 +28,9 @@ class VendaController extends Controller
      */
     public function index()
     {
-        //return view('sale');
-        return "venda";
-        //      precisa ter no template
+        $sale = session('sale');
+        return view('sale.index', compact(['sale']));
+        
     
     }
 
@@ -26,7 +41,7 @@ class VendaController extends Controller
      */
     public function create()
     {
-        return redirect()->route('sale');
+        return view('sale.create');
 
         //      precisa ter no template
         //{{   action="{{route('sale.store')}}" method="POST" }}
@@ -46,10 +61,10 @@ class VendaController extends Controller
         $name_client = $request->name_client;
         $cpf_client = $request->cpf_client;
         $quantitySale = $request->quantitySale;
-        $nova_venda = ["id_product"=>$id_product, "id_user"=>$id_user, "name_client"=>$name_client, "cpf_client"=>$cpf_client, "quantitySale"=>$quantitySale];
+        $new_sale = ["id_product"=>$id_product, "id_user"=>$id_user, "name_client"=>$name_client, "cpf_client"=>$cpf_client, "quantitySale"=>$quantitySale];
         
         //CADASTRAR
-        return redirect('sale');
+        return redirect()->route('sale.index');
     }
 
     /**
@@ -60,7 +75,11 @@ class VendaController extends Controller
      */
     public function show($id)
     {
-        //
+        $sale = session('sale');
+        $sale = $sale[$id - 1];
+        return view('sale.show', compact(['sale']));
+        //      precisa ter no template
+        //href="{{    route('sale.show',    $variavel   )  }}"
     }
 
     /**
@@ -71,7 +90,15 @@ class VendaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $sale = session('sale');
+        $sale = $sale[$id - 1];
+        return view('sale.edit', compact(['sale']));
+
+        //      precisa ter no template
+        //@csrf
+        //@method = "PUT"
+        //action="{{    route('sale.update',    $variavel   )  }}" method="POST"
+        //name = "name" value="{{     $varialvel['name']  }}"
     }
 
     /**
@@ -83,7 +110,10 @@ class VendaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $sale = session('sale');
+        $sale[$id - 1]['name'] = $request->name;
+        session(['sale' => $sale]);
+        return redirect()->route('sale.index');
     }
 
     /**
@@ -94,6 +124,10 @@ class VendaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $sale = session('sale');
+        $ids = array_column($sale, 'id_sale');
+        $index = array_search($id, $ids);
+        array_splice($sale,$index,1);
+        session(['sale' => $sale]);
     }
 }

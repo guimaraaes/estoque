@@ -6,6 +6,21 @@ use Illuminate\Http\Request;
 
 class ProdutoController extends Controller
 {
+    private $product = [
+        ['id_product'=>1, 'name'=>'s1'],
+        ['id_product'=>2, 'name'=>'s2'],
+        ['id_product'=>3, 'name'=>'s3'],
+        ['id_product'=>4, 'name'=>'s4']
+
+    ];
+
+    public function __construct(){
+        $product = session('product');
+        if (!isset($product))
+            session(['product' => $this->product]);
+
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,9 +28,8 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        //return view('product');
-        return "product";
-        //      precisa ter no template
+        $product = session('product');
+        return view('product.index', compact(['product']));
     }
 
     /**
@@ -25,7 +39,7 @@ class ProdutoController extends Controller
      */
     public function create()
     {
-        return redirect()->route('product');
+        return view('product.create');
 
         //      precisa ter no template
         //{{   action="{{route('product.store')}}" method="POST" }}
@@ -47,7 +61,7 @@ class ProdutoController extends Controller
         $new_product = ["id_product"=>$id_product, "name"=>$name, "quantity"=>$quantity, "quantityMin"=>$quantityMin];
         
         //CADASTRAR
-        return redirect('product');
+        return redirect()->route('product.index');
     }
   
     /**
@@ -58,7 +72,9 @@ class ProdutoController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = session('product');
+        $product = $product[$id - 1];
+        return view('product.show', compact(['product']));
     }
 
     /**
@@ -69,7 +85,9 @@ class ProdutoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = session('product');
+        $product = $product[$id - 1];
+        return view('product.edit', compact(['product']));
     }
 
     /**
@@ -81,7 +99,10 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = session('product');
+        $product[$id - 1]['name'] = $request->name;
+        session(['product' => $product]);
+        return redirect()->route('product.index');
     }
 
     /**
@@ -92,6 +113,10 @@ class ProdutoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = session('product');
+        $ids = array_column($product, 'id_product');
+        $index = array_search($id, $ids);
+        array_splice($product,$index,1);
+        session(['product' => $product]);
     }
 }
