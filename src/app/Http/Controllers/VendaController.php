@@ -28,8 +28,9 @@ class VendaController extends Controller
      */
     public function index()
     {
+       
         $sale = session('sale');
-        return view('sale.index', compact(['sale']));
+        return view('sale.index', compact(['sale']))->with('data', json_encode($sale));
         
     
     }
