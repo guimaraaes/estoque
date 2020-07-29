@@ -15,6 +15,7 @@ class UsuarioController extends Controller
     ];
 
     public function __construct(){
+        //$this->middleware('auth');
         $user = session('user');
         if (!isset($user))
             session(['user' => $this->user]);
@@ -28,7 +29,7 @@ class UsuarioController extends Controller
     public function index()
     {
         $user = session('user');
-        return view('user.index', compact(['user']));
+        return view('welcome', compact(['user']));
         
     }
 
@@ -53,7 +54,15 @@ class UsuarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
+        $request->validate([
+            'id_user' => 'required',
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+            'passwordRepet' => 'required'
+        ]);
+
         $user = session('user');
         $id_user = count($user)+1;
         $name = $request->name;

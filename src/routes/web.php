@@ -15,11 +15,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('/user', 'UsuarioController');
 
-Route::resource('/sale', 'VendaController');
+Route::resource('/sale', 'VendaControler');
 
 Route::resource('/product', 'ProdutoController');
 
 Route::view('/', 'welcome');
+
+Route::view('/auth', 'welcome');
 
 
 

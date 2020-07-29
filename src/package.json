@@ -27,6 +27,7 @@
     "dependencies": {
         "@inertiajs/inertia": "^0.1.9",
         "@inertiajs/inertia-react": "^0.1.6",
+        "@material-ui/core": "^4.11.0",
         "react-router-dom": "^5.2.0"
     }
 }

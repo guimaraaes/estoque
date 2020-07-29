@@ -15,6 +15,7 @@ class VendaController extends Controller
     ];
 
     public function __construct(){
+        //$this->middleware('auth');
         $sale = session('sale');
         if (!isset($sale))
             session(['sale' => $this->sale]);
@@ -30,7 +31,7 @@ class VendaController extends Controller
     {
        
         $sale = session('sale');
-        return view('sale.index', compact(['sale']))->with('data', json_encode($sale));
+        return view('welcome', compact(['sale']))->with('data', json_encode($sale));
         
     
     }
@@ -57,6 +58,14 @@ class VendaController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'id_product' => 'required',
+            'id_user' => 'required',
+            'name_client' => 'required',
+            'cpf_client' => 'required',
+            'quantitySale' => 'required'
+        ]);
+
         $id_product = $request->id_product;
         $id_user = $request->id_user;
         $name_client = $request->name_client;

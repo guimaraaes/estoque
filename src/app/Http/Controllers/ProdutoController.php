@@ -3,21 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Product;
 
 class ProdutoController extends Controller
 {
-    private $product = [
-        ['id_product'=>1, 'name'=>'s1'],
-        ['id_product'=>2, 'name'=>'s2'],
-        ['id_product'=>3, 'name'=>'s3'],
-        ['id_product'=>4, 'name'=>'s4']
+    // private $product = [
+    //     ['id_product'=>1, 'name'=>'s1'],
+    //     ['id_product'=>2, 'name'=>'s2'],
+    //     ['id_product'=>3, 'name'=>'s3'],
+    //     ['id_product'=>4, 'name'=>'s4']
 
-    ];
+    // ];
 
     public function __construct(){
-        $product = session('product');
-        if (!isset($product))
-            session(['product' => $this->product]);
+        //$this->middleware('auth');
+        // $product = session('product');
+        // if (!isset($product))
+        //     session(['product' => $this->product]);
 
     }
 
@@ -28,8 +30,9 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        $product = session('product');
-        return view('product.index', compact(['product']));
+        //$product = session('product');
+        $product = Product::all();
+        return view('welcome', compact(['product']));
     }
 
     /**
@@ -37,14 +40,13 @@ class ProdutoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('product.create');
+    // public function create()
+    // {
+    //     return view('product.create');
 
-        //      precisa ter no template
-        //{{   action="{{route('product.store')}}" method="POST" }}
-
-    }
+    //     //      precisa ter no template
+    //     //{{   action="{{route('product.store')}}" method="POST" }}
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -54,14 +56,22 @@ class ProdutoController extends Controller
      */
     public function store(Request $request)
     {
-        $id_product = $request->id_product;
-        $name = $request->name;
-        $quantity = $request->quantity;
-        $quantityMin = $request->quantityMin;
-        $new_product = ["id_product"=>$id_product, "name"=>$name, "quantity"=>$quantity, "quantityMin"=>$quantityMin];
+        $request->validate([
+            'id_product' => 'required',
+            'name' => 'required',
+            'quantity' => 'required',
+            'quantityMin' => 'required'
+        ]);
+        $product = new Product();
         
-        //CADASTRAR
-        return redirect()->route('product.index');
+        //$product->id_product = $request->input('id_product');
+        $product->name = $request->input('name');
+        $product->quantity = $request->input('quantity');
+        $product->quantityMin = $request->input('quantityMin');
+        $product->save();
+        //$new_product = ["id_product"=>$id_product, "name"=>$name, "quantity"=>$quantity, "quantityMin"=>$quantityMin];
+        
+        return redirect('/product');
     }
   
     /**
@@ -70,12 +80,14 @@ class ProdutoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $product = session('product');
-        $product = $product[$id - 1];
-        return view('product.show', compact(['product']));
-    }
+    // public function show($id)
+    // {
+    //     $product = session('product');
+    //     $product = $product[$id - 1];
+
+    //     //return view('product.show', compact(['product']));
+    //     return redirect('/product');
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -83,12 +95,12 @@ class ProdutoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $product = session('product');
-        $product = $product[$id - 1];
-        return view('product.edit', compact(['product']));
-    }
+    // public function edit($id)
+    // {
+    //     $product = session('product');
+    //     $product = $product[$id - 1];
+    //     return view('product.edit', compact(['product']));
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -99,10 +111,14 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $product = session('product');
-        $product[$id - 1]['name'] = $request->name;
-        session(['product' => $product]);
-        return redirect()->route('product.index');
+        
+        Product::where('id_product',$id)
+        ->update(['name' => $request->input('name'), 'quantity' => $request->input('quantity'), 'quantityMin' => $request->input('quantityMin')]);
+        
+        
+        // $product[$id - 1]['name'] = $request->name;
+        // session(['product' => $product]);
+        // return redirect()->route('product.index');
     }
 
     /**
@@ -113,10 +129,13 @@ class ProdutoController extends Controller
      */
     public function destroy($id)
     {
-        $product = session('product');
-        $ids = array_column($product, 'id_product');
-        $index = array_search($id, $ids);
-        array_splice($product,$index,1);
-        session(['product' => $product]);
+        Product::destroy($id);
+
+        return redirect('/product');
+        // $product = session('product');
+        // $ids = array_column($product, 'id_product');
+        // $index = array_search($id, $ids);
+        // array_splice($product,$index,1);
+        // session(['product' => $product]);
     }
 }
