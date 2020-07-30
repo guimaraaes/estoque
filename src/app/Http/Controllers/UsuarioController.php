@@ -21,7 +21,8 @@ class UsuarioController extends Controller
     public function index()
     {
         $p = User::all();
-        return view('welcome', compact(['p']));
+        return redirect()->route('/user')->with('p', json_encode($p));
+        //return view('welcome', compact(['p']));
         
     }
 

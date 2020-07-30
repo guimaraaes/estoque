@@ -7,11 +7,9 @@ use App\Product;
 
 class ProdutoController extends Controller
 {
-  
     public function __construct(){
         //$this->middleware('auth');
       
-
     }
 
     /**
@@ -23,8 +21,7 @@ class ProdutoController extends Controller
     {
         //$product = session('product');
         $p = Product::all();
-
-        return redirect()->route('/produto', compact['p'])->with('ps', json_encode($p));
+        return redirect()->route('/product')->with('p', json_encode($p));
 
         //return view('welcome', compact(['p']));
     }
@@ -57,15 +54,6 @@ class ProdutoController extends Controller
         return redirect('/product');
     }
   
-
-    public function update(Request $request, $id)
-    {
-        Product::where('id_product',$id)
-        ->update(['name' => $request->input('name'), 'quantity' => $request->input('quantity'), 'quantityMin' => $request->input('quantityMin')]);
-        
-        
-    }
-
     /**
      * Remove the specified resource from storage.
      *

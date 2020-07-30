@@ -10,7 +10,7 @@ services:
       container_name: estoque-postgres
       working_dir: /application
       volumes:
-        - ./pgdata:/application
+        - ./pgdata:/var/lib/postgresql/data
       environment:
         - POSTGRES_USER=root
         - POSTGRES_PASSWORD=root

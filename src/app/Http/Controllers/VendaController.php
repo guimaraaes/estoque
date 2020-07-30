@@ -8,7 +8,6 @@ use App\Product;
 
 class VendaController extends Controller
 {
-
     public function __construct(){
         //$this->middleware('auth');
         
@@ -22,9 +21,9 @@ class VendaController extends Controller
     public function index()
     {
         $p = Sale::all();
-        return view('welcome', compact(['p']));
+        return redirect()->route('/sale')->with('p', json_encode($p));
+        //return view('welcome', compact(['p']));
         
-    
     }
 
     /**
@@ -52,8 +51,13 @@ class VendaController extends Controller
         $sale->quantitysale = $request->input('quantitysale');
         $sale->save();
         
-        Product::where('id_product',$$request->input('id_product'))
-        ->update(['quantity' => $request->input('quantity - quantitysale')]);
+        $p = Product::find($request->input('id_product'));
+        $quantityp = $p->quantity;
+
+        $newquantity = $quantityp - $request->input('quantitysale');
+        
+        Product::where('id_product',$request->input('id_product'))
+        ->update(['quantity' => $newquantity]);
         
         
         return redirect('/sale');

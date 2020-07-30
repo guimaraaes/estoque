@@ -24,7 +24,7 @@ Route::resource('/product', 'ProdutoController');
 Route::view('/', 'welcome');
 
 
-Route::view('/auth', 'welcome');
+//Route::view('/auth', 'welcome');
 
 
 
