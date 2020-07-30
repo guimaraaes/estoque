@@ -3,23 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Sale;
+use App\Product;
 
 class VendaController extends Controller
 {
-    private $sale = [
-        ['id_sale'=>1, 'name'=>'s1'],
-        ['id_sale'=>2, 'name'=>'s2'],
-        ['id_sale'=>3, 'name'=>'s3'],
-        ['id_sale'=>4, 'name'=>'s4']
-
-    ];
 
     public function __construct(){
         //$this->middleware('auth');
-        $sale = session('sale');
-        if (!isset($sale))
-            session(['sale' => $this->sale]);
-
+        
     }
 
     /**
@@ -29,25 +21,10 @@ class VendaController extends Controller
      */
     public function index()
     {
-       
-        $sale = session('sale');
-        return view('welcome', compact(['sale']))->with('data', json_encode($sale));
+        $p = Sale::all();
+        return view('welcome', compact(['p']));
         
     
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('sale.create');
-
-        //      precisa ter no template
-        //{{   action="{{route('sale.store')}}" method="POST" }}
-
     }
 
     /**
@@ -65,79 +42,24 @@ class VendaController extends Controller
             'cpf_client' => 'required',
             'quantitySale' => 'required'
         ]);
-
-        $id_product = $request->id_product;
-        $id_user = $request->id_user;
-        $name_client = $request->name_client;
-        $cpf_client = $request->cpf_client;
-        $quantitySale = $request->quantitySale;
-        $new_sale = ["id_product"=>$id_product, "id_user"=>$id_user, "name_client"=>$name_client, "cpf_client"=>$cpf_client, "quantitySale"=>$quantitySale];
         
-        //CADASTRAR
-        return redirect()->route('sale.index');
+        $sale = new Sale();
+
+        $sale->id_product = $request->input('id_product');
+        $sale->id_user = $request->input('id_user');
+        $sale->name_client = $request->input('name_client');
+        $sale->cpf_client = $request->input('cpf_client');
+        $sale->quantitysale = $request->input('quantitysale');
+        $sale->save();
+        
+        Product::where('id_product',$$request->input('id_product'))
+        ->update(['quantity' => $request->input('quantity - quantitysale')]);
+        
+        
+        return redirect('/sale');
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $sale = session('sale');
-        $sale = $sale[$id - 1];
-        return view('sale.show', compact(['sale']));
-        //      precisa ter no template
-        //href="{{    route('sale.show',    $variavel   )  }}"
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $sale = session('sale');
-        $sale = $sale[$id - 1];
-        return view('sale.edit', compact(['sale']));
 
-        //      precisa ter no template
-        //@csrf
-        //@method = "PUT"
-        //action="{{    route('sale.update',    $variavel   )  }}" method="POST"
-        //name = "name" value="{{     $varialvel['name']  }}"
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $sale = session('sale');
-        $sale[$id - 1]['name'] = $request->name;
-        session(['sale' => $sale]);
-        return redirect()->route('sale.index');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $sale = session('sale');
-        $ids = array_column($sale, 'id_sale');
-        $index = array_search($id, $ids);
-        array_splice($sale,$index,1);
-        session(['sale' => $sale]);
-    }
 }

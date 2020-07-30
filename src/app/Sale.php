@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sale extends Model
 {
-    protected $fillable = ['id'];
+    //protected $fillable = ['id'];
 }
+    

@@ -15,6 +15,13 @@ class CreateSalesTable extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->integer('id_product')->nullable();
+            $table->foreign('id_product')->references('id')->on('products');
+            $table->integer('id_user')->nullable();
+            $table->foreign('id_user')->references('id')->on('users');
+            $table->string('name_client')->nullable();
+            $table->string('cpf_client')->nullable();
+            $table->string('quantitysale')->nullable();
             $table->timestamps();
         });
     }

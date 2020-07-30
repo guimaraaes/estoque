@@ -7,7 +7,11 @@
     
 </head>
 <body id="app"> 
-welcome page 
+<ol>
+        @foreach ($p as $u)
+        <li>{{  $u }}</li>
+        @endforeach
+</ol>
 
 </body>
 </html>
