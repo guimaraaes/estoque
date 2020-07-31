@@ -15,8 +15,8 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id')->autoIncrement();
-            $table->string('name')->nullable();
-            $table->integer('quantity')->nullable();
+            $table->string('name');
+            $table->integer('quantity');
             $table->integer('quantitymin')->nullable();
             $table->timestamps();
 

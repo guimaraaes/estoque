@@ -64,6 +64,10 @@ class ComposerStaticInit51d539a47601448fe15b1479acbc38e4
             'phpseclib\\' => 10,
             'phpDocumentor\\Reflection\\' => 25,
         ),
+        'g' => 
+        array (
+            'geekcom\\ValidatorDocs\\' => 22,
+        ),
         'X' => 
         array (
             'XdgBaseDir\\' => 11,
@@ -219,6 +223,10 @@ class ComposerStaticInit51d539a47601448fe15b1479acbc38e4
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'geekcom\\ValidatorDocs\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/geekcom/validator-docs/src/validator-docs',
         ),
         'XdgBaseDir\\' => 
         array (
@@ -574,6 +582,7 @@ class ComposerStaticInit51d539a47601448fe15b1479acbc38e4
 
     public static $classMap = array (
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
+        'App\\Events\\EventNovoRegistro' => __DIR__ . '/../..' . '/app/Events/EventNovoRegistro.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
@@ -584,6 +593,7 @@ class ComposerStaticInit51d539a47601448fe15b1479acbc38e4
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\ProdutoController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProdutoController.php',
+        'App\\Http\\Controllers\\RelatorioController' => __DIR__ . '/../..' . '/app/Http/Controllers/RelatorioController.php',
         'App\\Http\\Controllers\\UsuarioController' => __DIR__ . '/../..' . '/app/Http/Controllers/UsuarioController.php',
         'App\\Http\\Controllers\\VendaController' => __DIR__ . '/../..' . '/app/Http/Controllers/VendaController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
@@ -5189,6 +5199,16 @@ class ComposerStaticInit51d539a47601448fe15b1479acbc38e4
         'Whoops\\Util\\SystemFacade' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/SystemFacade.php',
         'Whoops\\Util\\TemplateHelper' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/TemplateHelper.php',
         'XdgBaseDir\\Xdg' => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src/Xdg.php',
+        'geekcom\\ValidatorDocs\\Rules\\Certidao' => __DIR__ . '/..' . '/geekcom/validator-docs/src/validator-docs/Rules/Certidao.php',
+        'geekcom\\ValidatorDocs\\Rules\\Cnh' => __DIR__ . '/..' . '/geekcom/validator-docs/src/validator-docs/Rules/Cnh.php',
+        'geekcom\\ValidatorDocs\\Rules\\Cnpj' => __DIR__ . '/..' . '/geekcom/validator-docs/src/validator-docs/Rules/Cnpj.php',
+        'geekcom\\ValidatorDocs\\Rules\\Cns' => __DIR__ . '/..' . '/geekcom/validator-docs/src/validator-docs/Rules/Cns.php',
+        'geekcom\\ValidatorDocs\\Rules\\Cpf' => __DIR__ . '/..' . '/geekcom/validator-docs/src/validator-docs/Rules/Cpf.php',
+        'geekcom\\ValidatorDocs\\Rules\\Nis' => __DIR__ . '/..' . '/geekcom/validator-docs/src/validator-docs/Rules/Nis.php',
+        'geekcom\\ValidatorDocs\\Rules\\Sanitization' => __DIR__ . '/..' . '/geekcom/validator-docs/src/validator-docs/Rules/Sanitization.php',
+        'geekcom\\ValidatorDocs\\Rules\\TituloEleitoral' => __DIR__ . '/..' . '/geekcom/validator-docs/src/validator-docs/Rules/TituloEleitoral.php',
+        'geekcom\\ValidatorDocs\\Validator' => __DIR__ . '/..' . '/geekcom/validator-docs/src/validator-docs/Validator.php',
+        'geekcom\\ValidatorDocs\\ValidatorProvider' => __DIR__ . '/..' . '/geekcom/validator-docs/src/validator-docs/ValidatorProvider.php',
         'phpDocumentor\\Reflection\\DocBlock' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock.php',
         'phpDocumentor\\Reflection\\DocBlockFactory' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlockFactory.php',
         'phpDocumentor\\Reflection\\DocBlockFactoryInterface' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlockFactoryInterface.php',

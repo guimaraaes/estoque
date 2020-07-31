@@ -20,8 +20,7 @@ class ProdutoController extends Controller
     public function index()
     {
         $p = Product::all();
-        //return redirect()->route('/product')->with('p', json_encode($p));
-        return view('welcome')->with('p', json_encode($p));
+        return json_encode($p);
     }
 
     /**
@@ -33,21 +32,21 @@ class ProdutoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:products',
-            'quantity' => 'required',
-            'quantitymin' => 'required'
+            'name' => 'required',
+            'quantity' => 'required'
         ]);
-        $product = new Product();
-        $product->name = $request->input('name');
-        $product->quantity = $request->input('quantity');
-        $product->quantitymin = $request->input('quantitymin');
-
-        //$product->id_product = $request->input('id_product');
-        // $product->name = 'dove';
-        // $product->quantity = 10;
-        // $product->quantitymin = 1;
-
-        $product->save();
+        if (Product::where('name', $request->input('name'))->count() == 1){
+            $p = Product::where('name', $request->input('name'))->value('quantity');
+            $newquantity = $p + $request->input('quantity');
+            Product::where('name',$request->input('name'))
+                ->update(['quantity' => $newquantity, 'quantitymin' => $request->input('quantitymin')]);
+        } else {
+            $product = new Product();
+            $product->name = $request->input('name');
+            $product->quantity = $request->input('quantity');
+            $product->quantitymin = $request->input('quantitymin');
+            $product->save();
+        }   
         //return response()->json(['ok'], 200);
         return redirect('/product');
     }

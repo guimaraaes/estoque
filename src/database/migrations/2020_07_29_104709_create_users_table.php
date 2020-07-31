@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use App\User;
 class CreateUsersTable extends Migration
 {
     /**
@@ -15,14 +16,21 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id')->autoIncrement();
-            $table->string('name')->nullable();
-            $table->string('email')->nullable()->unique();
+            $table->string('name');
+            $table->string('email')->unique();
             $table->boolean('active')->default(false);
             $table->string('token')->nullable();
-            $table->string('password')->nullable();
+            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });
+
+        User::create([
+            'name' => 'super user',
+            'email' => 'estoque@gmail.com',
+            'password' => Hash::make('estoque.'),
+        ]);
+
     }
 
     /**
