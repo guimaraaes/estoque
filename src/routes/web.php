@@ -19,27 +19,16 @@ Route::resource('/sale', 'VendaController');
 
 Route::resource('/product', 'ProdutoController');
 
-//Route::get('/product.storee', 'ProdutoController@storee');
-
-Route::view('/', 'welcome');
+Route::view('/', 'welcome')->middleware('auth');
 
 
 //Route::view('/auth', 'welcome');
 
 
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
 
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

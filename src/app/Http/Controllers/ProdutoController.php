@@ -8,7 +8,7 @@ use App\Product;
 class ProdutoController extends Controller
 {
     public function __construct(){
-        //$this->middleware('auth');
+        //  $this->middleware('auth');
       
     }
 
@@ -19,11 +19,9 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        //$product = session('product');
         $p = Product::all();
-        return redirect()->route('/product')->with('p', json_encode($p));
-
-        //return view('welcome', compact(['p']));
+        //return redirect()->route('/product')->with('p', json_encode($p));
+        return view('welcome')->with('p', json_encode($p));
     }
 
     /**
@@ -35,10 +33,9 @@ class ProdutoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_product' => 'required',
-            'name' => 'required',
+            'name' => 'required|unique:products',
             'quantity' => 'required',
-            'quantityMin' => 'required'
+            'quantitymin' => 'required'
         ]);
         $product = new Product();
         $product->name = $request->input('name');
@@ -51,6 +48,7 @@ class ProdutoController extends Controller
         // $product->quantitymin = 1;
 
         $product->save();
+        //return response()->json(['ok'], 200);
         return redirect('/product');
     }
   
@@ -63,6 +61,7 @@ class ProdutoController extends Controller
     public function destroy($id)
     {
         Product::destroy($id);
+        //return response()->json(['ok'], 200);
         return redirect('/product');
     }
 }

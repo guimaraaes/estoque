@@ -7,8 +7,6 @@ use App\User;
 
 class UsuarioController extends Controller
 {
-    
-
     public function __construct(){
         //$this->middleware('auth');
 
@@ -21,9 +19,8 @@ class UsuarioController extends Controller
     public function index()
     {
         $p = User::all();
-        return redirect()->route('/user')->with('p', json_encode($p));
-        //return view('welcome', compact(['p']));
-        
+        return view('welcome')->with('p', json_encode($p));
+
     }
 
 
@@ -37,20 +34,17 @@ class UsuarioController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed'
         ]);
 
         $user = new User();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        $user->password = $request->input('password');
+        $user->password = bcrypt($request->input('password'));
         $user->save();
         return redirect('/user');
-
-        
     }
-
 
     /**
      * Remove the specified resource from storage.

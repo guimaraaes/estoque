@@ -21,8 +21,8 @@ class VendaController extends Controller
     public function index()
     {
         $p = Sale::all();
-        return redirect()->route('/sale')->with('p', json_encode($p));
-        //return view('welcome', compact(['p']));
+        //return redirect()->route('/sale')->with('p', json_encode($p));
+        return view('welcome')->with('p', json_encode($p));
         
     }
 
@@ -38,12 +38,11 @@ class VendaController extends Controller
             'id_product' => 'required',
             'id_user' => 'required',
             'name_client' => 'required',
-            'cpf_client' => 'required',
-            'quantitySale' => 'required'
+            //'cpf_client' => 'required',
+            'quantitysale' => 'required'
         ]);
         
         $sale = new Sale();
-
         $sale->id_product = $request->input('id_product');
         $sale->id_user = $request->input('id_user');
         $sale->name_client = $request->input('name_client');
@@ -56,10 +55,9 @@ class VendaController extends Controller
 
         $newquantity = $quantityp - $request->input('quantitysale');
         
-        Product::where('id_product',$request->input('id_product'))
+        Product::where('id',$request->input('id_product'))
         ->update(['quantity' => $newquantity]);
-        
-        
+              
         return redirect('/sale');
 
     }
