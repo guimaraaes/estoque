@@ -7,11 +7,6 @@ use App\Product;
 
 class ProdutoController extends Controller
 {
-    public function __construct(){
-        //  $this->middleware('auth');
-      
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +15,16 @@ class ProdutoController extends Controller
     public function index()
     {
         $p = Product::all();
-        return json_encode($p);
+        
+        foreach ($p as $u) {
+            if(($u['quantitymin'] != null) && ($u['quantitymin']>=$u['quantity']) ){
+                $u->alert = 1;
+            } else {
+                $u->alert = 0;
+            }
+        }
+
+        return response()->json($p->toArray());
     }
 
     /**
@@ -35,11 +39,20 @@ class ProdutoController extends Controller
             'name' => 'required',
             'quantity' => 'required'
         ]);
+        // $validator = Validator::make($request, [
+        //     'name' => ['required'],
+        //     'quantity' => ['required']
+        //     ]);
+        
+    
+        
+        // return response()->json('ok');
+
         if (Product::where('name', $request->input('name'))->count() == 1){
             $p = Product::where('name', $request->input('name'))->value('quantity');
             $newquantity = $p + $request->input('quantity');
             Product::where('name',$request->input('name'))
-                ->update(['quantity' => $newquantity, 'quantitymin' => $request->input('quantitymin')]);
+                    ->update(['quantity' => $newquantity]);
         } else {
             $product = new Product();
             $product->name = $request->input('name');
@@ -47,8 +60,23 @@ class ProdutoController extends Controller
             $product->quantitymin = $request->input('quantitymin');
             $product->save();
         }   
-        //return response()->json(['ok'], 200);
-        return redirect('/product');
+        
+
+    }
+    
+
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'quantity' => 'required'
+        ]); 
+        Product::where('id',$id)
+                ->update([  'name' => $request->input('name'), 
+                            'quantity' =>  $request->input('quantity'), 
+                            'quantitymin' => $request->input('quantitymin')
+                        ]);
     }
   
     /**
@@ -60,7 +88,5 @@ class ProdutoController extends Controller
     public function destroy($id)
     {
         Product::destroy($id);
-        //return response()->json(['ok'], 200);
-        return redirect('/product');
     }
 }

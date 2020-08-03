@@ -4,13 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
-    public function __construct(){
-        //$this->middleware('auth');
-
-    }
     /**
      * Display a listing of the resource.
      *
@@ -18,12 +15,24 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        $p = User::all();
-        return json_encode($p);
+        $p = User::where('id', '>', '1')->get();
 
+        // return json_encode($p);
+        return response()->json($p->toArray());
     }
 
-
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]); 
+        User::where('id',$id)
+            ->update([  'name' => $request->input('name'), 
+                        'password' => Hash::make($request['password']
+                    )]);
+    }
+  
     /**
      * Remove the specified resource from storage.
      *
@@ -33,6 +42,6 @@ class UsuarioController extends Controller
     public function destroy($id)
     {
         User::destroy($id);
-        return redirect('/user');
+        //return redirect('/user');
     }
 }

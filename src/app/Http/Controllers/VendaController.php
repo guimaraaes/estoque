@@ -8,11 +8,6 @@ use App\Product;
 
 class VendaController extends Controller
 {
-    public function __construct(){
-        //$this->middleware('auth');
-        
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +16,12 @@ class VendaController extends Controller
     public function index()
     {
         $p = Sale::all();
-        return json_encode($p);
+        foreach ($p as $u) {
+            $name = Product::where('id',$u->id_product )->value('name');
+            $u->id_product = $name;
+        }
+
+        return response()->json($p->toArray());
         
     }
 
@@ -41,13 +41,9 @@ class VendaController extends Controller
             'quantitysale' => 'required|integer'
         ]);
 
-        //          pendências
-        
-        //selecionar produtos mais vendidos
-        //obter produtos em alertas
-
-        if (Product::find($request->input('id_product'))->quantity >= $request->input('quantitysale')){
+        if  (Product::find($request->input('id_product'))->quantity >= $request->input('quantitysale')){
             $sale = new Sale();
+            $name = Product::where('id',$b['id_product'] )->value('name');
             $sale->id_product = $request->input('id_product');
             $sale->id_user = $request->input('id_user');
             $sale->name_client = $request->input('name_client');
@@ -59,13 +55,11 @@ class VendaController extends Controller
             $quantityp = $p->quantity;
             $newquantity = $quantityp - $request->input('quantitysale');
             Product::where('id',$request->input('id_product'))
-                ->update(['quantity' => $newquantity]);
+                    ->update(['quantity' => $newquantity]);
             
-            return redirect('/sale');
-
         } else {
             return redirect('/sale/quantityProductIndisponible');
-        }
+        }   
 
     }
 
