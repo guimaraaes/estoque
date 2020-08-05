@@ -12,15 +12,21 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes();
+Auth::routes(); 
+// Route::post('/register', 'API\AuthController@register');
+// Route::post('/login', 'API\AuthController@login');
 
-//Route::middleware('auth')->group(function () {
+// Route::middleware('auth')->group(function () {
+    
     Route::get('/report', 'RelatorioController@index');
+    Route::get('/', 'RelatorioController@index');
     Route::resource('/user', 'UsuarioController');
     Route::resource('/sale', 'VendaController');
     Route::resource('/product', 'ProdutoController');
 
-//});
+
+    //Route::get('/userAuth', 'UsuarioController@userAuth');
+// });
 
  
 

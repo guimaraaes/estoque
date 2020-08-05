@@ -7,52 +7,35 @@ use App\Product;
 
 class ProdutoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $p = Product::all();
         
-        foreach ($p as $u) {
-            if(($u['quantitymin'] != null) && ($u['quantitymin']>=$u['quantity']) ){
-                $u->alert = 1;
+        foreach ($p as $uProduct) {
+            if(($uProduct['quantitymin'] != null) && ($uProduct['quantitymin']>=$uProduct['quantity']) ){
+                $uProduct->alert = 1;
             } else {
-                $u->alert = 0;
+                $uProduct->alert = 0;
             }
         }
-
         return response()->json($p->toArray());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
             'quantity' => 'required'
         ]);
-        // $validator = Validator::make($request, [
-        //     'name' => ['required'],
-        //     'quantity' => ['required']
-        //     ]);
-        
-    
-        
-        // return response()->json('ok');
-
         if (Product::where('name', $request->input('name'))->count() == 1){
-            $p = Product::where('name', $request->input('name'))->value('quantity');
-            $newquantity = $p + $request->input('quantity');
-            Product::where('name',$request->input('name'))
-                    ->update(['quantity' => $newquantity]);
+            $quantity = Product::where('name', $request->input('name'))->value('quantity');
+            $quantitymin = Product::where('name', $request->input('name'))->value('quantitymin');
+            $newquantity = $quantity + $request->input('quantity');
+            Product::where('name',$request->input('name'))->update(['quantity' => $newquantity]);
+            if ($quantitymin != $request->input('quantitymin') && $request->input('quantitymin') != null) {
+                Product::where('name',$request->input('name'))
+                        ->update(['quantitymin' => $request->input('quantitymin')]);
+            } 
         } else {
             $product = new Product();
             $product->name = $request->input('name');
@@ -60,11 +43,7 @@ class ProdutoController extends Controller
             $product->quantitymin = $request->input('quantitymin');
             $product->save();
         }   
-        
-
     }
-    
-
 
     public function update(Request $request, $id)
     {
@@ -78,13 +57,7 @@ class ProdutoController extends Controller
                             'quantitymin' => $request->input('quantitymin')
                         ]);
     }
-  
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         Product::destroy($id);

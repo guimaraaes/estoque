@@ -21,8 +21,10 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/product';
 
+    //public const HOME = 'http://192.168.200.19:3000/';
+    public const HOME = '/';
+    
     /**
      * Define your route model bindings, pattern filters, etc.
      *
