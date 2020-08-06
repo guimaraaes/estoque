@@ -12,19 +12,17 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes(); 
+ Auth::routes(); 
 // Route::post('/register', 'API\AuthController@register');
 // Route::post('/login', 'API\AuthController@login');
+// Route::post('/logout', 'API\AuthController@logout');
 
 // Route::middleware('auth')->group(function () {
-    
-    Route::get('/report', 'RelatorioController@index');
-    Route::get('/', 'RelatorioController@index');
-    Route::resource('/user', 'UsuarioController');
-    Route::resource('/sale', 'VendaController');
-    Route::resource('/product', 'ProdutoController');
-
-
+    Route::get('/report', 'ReportController@index');
+    Route::get('/', 'ReportController@index');
+    Route::resource('/user', 'UserController')->only(['index', 'destroy']);
+    Route::resource('/sale', 'SaleController')->only(['index', 'store']);
+    Route::resource('/product', 'ProductController')->only(['index', 'store', 'update', 'destroy']);
     //Route::get('/userAuth', 'UsuarioController@userAuth');
 // });
 
