@@ -6,7 +6,8 @@ use App\Product;
 
 class ProductService{
     public static function getProducts(){
-        $products = Product::all();
+        $products = Product::orderBy('id', 'desc')->get();
+        //$products = Product::orderBy('id', 'desc')->paginate(1);
         $sales = Sale::all();
         $sold = 0;
         foreach ($products as $uProduct) {
@@ -32,8 +33,7 @@ class ProductService{
             $newquantity = $quantity + $data->quantity;
             Product::where('name',$data->name)->update(['quantity' => $newquantity]);
             if ($quantitymin != $data->quantitymin && $data->quantitymin != null) {
-                Product::where('name',$data->name)
-                        ->update(['quantitymin' => $data->quantitymin]);
+                Product::where('name',$data->name)->update(['quantitymin' => $data->quantitymin]);
             } 
             
         } else {
@@ -46,11 +46,10 @@ class ProductService{
     }
 
     public static function updateProduct($data, $id){
-        Product::where('id',$id)
-                ->update([  'name' => $data->name, 
-                            'quantity' =>  $data->quantity, 
-                            'quantitymin' => $data->quantitymin
-                        ]);
+        Product::where('id',$id)->update([  'name' => $data->name, 
+                                            'quantity' =>  $data->quantity, 
+                                            'quantitymin' => $data->quantitymin
+                                        ]);
     }
 
     public static function destroyProduct($id)

@@ -15,12 +15,13 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            //$table->increments('id')->autoIncrement();
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            //$table->boolean('active')->default(false);
-            //$table->string('token')->nullable();
+            $table->boolean('active')->default(false);
+            $table->string('access_token')->nullable();
+            $table->string('token_type')->nullable();
+            $table->string('expires_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
@@ -29,7 +30,7 @@ class CreateUsersTable extends Migration
         User::create([
             'name' => 'super user',
             'email' => 'estoque@gmail.com',
-            'password' => Hash::make('estoque.'),
+            'password' => bcrypt('estoque.'),
         ]);
 
     }

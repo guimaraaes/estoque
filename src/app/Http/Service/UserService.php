@@ -7,9 +7,11 @@ use App\User;
 
 class UserService{
     public static function getUsers(){
-        $user = User::all();
+        $user = User::orderBy('id', 'desc')->get();
+        //$user = User::orderBy('id', 'desc')->paginate(1);
         return $user;
     }
+
     public static function destroyUser($id)
     {
         User::destroy($id);

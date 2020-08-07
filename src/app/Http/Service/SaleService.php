@@ -7,7 +7,8 @@ use App\Product;
 
 class SaleService{
     public static function getSales(){
-        $sales = Sale::all();
+        $sales = Sale::orderBy('id', 'desc')->get();
+            //$sales = Sale::orderBy('id', 'desc')->paginate(1);
         foreach ($sales as $uSale) {
             $uSale->id_product = Product::where('id',$uSale->id_product )->value('name');
         }
