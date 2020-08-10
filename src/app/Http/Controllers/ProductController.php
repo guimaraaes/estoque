@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Service\ProductService;
+use App\Product;
+use JWTAuth;
 
 class ProductController extends Controller
 {
+
     public function index()
     {
         $p = ProductService::getProducts();

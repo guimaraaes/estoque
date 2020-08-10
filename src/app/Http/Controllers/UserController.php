@@ -15,12 +15,6 @@ class UserController extends Controller
         return response()->json($p->toArray());
     }
 
-    public function userAuth()
-    {
-        $p = Auth::user();
-        return response()->json($p);
-    }
-
     public function destroy($id)
     {
         UserService::destroyUser($id);

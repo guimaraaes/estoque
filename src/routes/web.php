@@ -12,21 +12,18 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes(); //IMPLEMENTAR middleware auth no RegisterController
 
-// // NÃO USAR ROTAS ABAIXO
-// // // Route::post('/login', 'API\AuthController@login');
-// // // Route::post('/register', 'API\AuthController@register');
-// // // Route::post('/logout', 'API\AuthController@logout');
+Route::post('/login', 'AuthController@login');
 
-// Route::middleware('auth')->group(function () {
+Route::group(['middleware' => 'auth.jwt'], function () {
+    Route::post('/register', 'AuthController@register');
     Route::get('/report', 'ReportController@index');
     Route::get('/', 'ReportController@index');
     Route::resource('/user', 'UserController')->only(['index', 'destroy']);
     Route::resource('/sale', 'SaleController')->only(['index', 'store']);
     Route::resource('/product', 'ProductController')->only(['index', 'store', 'update', 'destroy']);
-    Route::get('/userAuth', 'UserController@userAuth');
-// });
+    Route::post('/logout', 'AuthController@logout');
+});
 
  
 
