@@ -6,7 +6,6 @@ use App\Product;
 use App\User;
 use App\Report;
 
-
 class ReportService{
     public static function getReports(){
         $reports = new Report;
@@ -24,7 +23,6 @@ class ReportService{
                     $products_alert = $products_alert + 1;
                 }
             }
-
             $bestsellers_name = [];
             //$bestsellers_total = [];
             $bestsellers = Sale::selectRaw('id_product, sum(quantitysale) as sum')->groupBy('id_product')->get()->take(3);
@@ -43,6 +41,5 @@ class ReportService{
         }
         return $reports;
     }
-
 
 }

@@ -3,14 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Http\Service\ReportService;
+use App\Repositories\ReportRepositoryInterface;
 
 class ReportController extends Controller
 {
+
+    private $reportRepository;
+  
+    public function __construct(ReportRepositoryInterface $reportRepository)
+    {
+        $this->reportRepository = $reportRepository;
+    }
+ 
     public function index()
     {
-        $p = ReportService::getReports();
-        return response()->json([$p->toArray()]);
-}
+        $reports = $this->reportRepository->all();
+        return response()->json([$reports->toArray()]);
+    }
+
 }

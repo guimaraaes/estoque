@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', 'AuthController@login');
 
-Route::group(['middleware' => 'auth.jwt'], function () {
+//Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/register', 'AuthController@register');
     Route::get('/report', 'ReportController@index');
     Route::get('/', 'ReportController@index');
@@ -23,7 +23,8 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::resource('/sale', 'SaleController')->only(['index', 'store']);
     Route::resource('/product', 'ProductController')->only(['index', 'store', 'update', 'destroy']);
     Route::post('/logout', 'AuthController@logout');
-});
+    Route::post('/authUser', 'AuthController@getAuthUser');
+//});
 
  
 

@@ -19,7 +19,6 @@ class CreateProductsTable extends Migration
             $table->integer('quantity');
             $table->integer('quantitymin')->nullable();
             $table->timestamps();
-
         });
     }
 

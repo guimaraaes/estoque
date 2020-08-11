@@ -6,8 +6,8 @@ use App\Product;
 
 class ProductService{
     public static function getProducts(){
-        $products = Product::orderBy('id', 'desc')->get();
-        //$products = Product::orderBy('id', 'desc')->paginate(2);
+        //$products = Product::orderBy('id', 'desc')->get();
+        $products = Product::orderBy('id', 'desc')->paginate(10);
         $sales = Sale::all();
         $sold = 0;
         foreach ($products as $uProduct) {
@@ -27,6 +27,7 @@ class ProductService{
     }
 
     public static function storeProduct($data){
+        
         if (Product::where('name', $data->name)->count() == 1){
             $quantity = Product::where('name', $data->name)->value('quantity');
             $quantitymin = Product::where('name', $data->name)->value('quantitymin');
@@ -35,7 +36,6 @@ class ProductService{
             if ($quantitymin != $data->quantitymin && $data->quantitymin != null) {
                 Product::where('name',$data->name)->update(['quantitymin' => $data->quantitymin]);
             } 
-            
         } else {
             $product = new Product();
             $product->name = $data->name;
@@ -43,6 +43,8 @@ class ProductService{
             $product->quantitymin = $data->quantitymin;
             $product->save();
         } 
+        return response('Produto cadastrado', 200);
+        
     }
 
     public static function updateProduct($data, $id){
@@ -50,6 +52,7 @@ class ProductService{
                                             'quantity' =>  $data->quantity, 
                                             'quantitymin' => $data->quantitymin
                                         ]);
+        return response('Produto atualizado', 200);
     }
 
     public static function destroyProduct($id)

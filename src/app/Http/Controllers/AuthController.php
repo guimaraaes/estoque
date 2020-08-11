@@ -11,6 +11,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller
 {
+    
     public $loginAfterSignUp = true;
  
     public function register(Request $request)
@@ -26,9 +27,7 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->save();
-        // if ($this->loginAfterSignUp) {
-        //     return $this->login($request);
-        // }
+
         return response()->json([
             'success' => true,
             'data' => $user
@@ -42,7 +41,7 @@ class AuthController extends Controller
         if (!$jwt_token = JWTAuth::attempt($input)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid Email or Password',
+                'message' => 'e-mail ou senha inválidos',
             ], 401);
         }
         return response()->json([
