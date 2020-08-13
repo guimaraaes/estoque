@@ -18,7 +18,7 @@ class ReportController extends Controller
     public function index()
     {
         $reports = $this->reportRepository->all();
-        return response()->json([$reports->toArray()]);
+        return response()->json([$reports->toArray()]);    
     }
 
 }

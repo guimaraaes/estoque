@@ -14,7 +14,13 @@ class UserRepository implements UserRepositoryInterface
 
     public function all()
     {
-        $users = $this->model->orderBy('id', 'desc')->paginate(10);
+        $users = $this->model->orderBy('id', 'desc')->paginate(7);
+        return $users;
+    }
+
+    public function show($name)
+    {
+        $users = $this->model->where('name', 'like', '%'. $name .'%')->get();
         return $users;
     }
 

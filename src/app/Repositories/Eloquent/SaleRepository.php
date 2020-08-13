@@ -15,7 +15,7 @@ class SaleRepository implements SaleRepositoryInterface
 
     public function all()
     {
-        $sales = $this->model->orderBy('id', 'desc')->paginate(10);
+        $sales = $this->model->orderBy('id', 'desc')->paginate(12);
         foreach ($sales as $uSale) {
             $uSale->id_product = Product::where('id',$uSale->id_product )->value('name');
         }
@@ -33,6 +33,13 @@ class SaleRepository implements SaleRepositoryInterface
         } else 
             return response('Quantidade indisponível', 406);
         
+    }
+
+    public function show($name)
+    {
+        $sales = $this->model->where('name_client', 'like', '%'. $name .'%')
+                            ->orwhere('cpf_client', 'like', '%'. $name .'%')->get();
+        return $sales;
     }
 
 }

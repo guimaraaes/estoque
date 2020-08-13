@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\ProductRequest;
 use App\Repositories\ProductRepositoryInterface;
 
 class ProductController extends Controller
@@ -18,44 +17,31 @@ class ProductController extends Controller
     public function index()
     {
         $products = $this->productRepository->all();
-        return response()->json([$products->toArray()]);
+        return response()->json([$products]);
     }
 
-    public function store(Request $request)
+    public function productlist()
     {
-        $validator = Validator::make($request->all(),[
-            'name' => 'required',
-            'quantity' => 'required|integer|min:0'
-        ], [
-            'name.required' => 'Insira um nome',
-            'quantity.required' => 'Insira uma quantidade',
-            'quantity.integer' => 'Quantidade deve ser inteira',
-            'quantity.min' => 'Quantidade deve ser positiva',
-        ]);
-
-        if($validator->fails())
-            return response(['message' => $validator->messages(), 406]);
-        else 
-            return $this->productRepository->create($request->all());
+        $products = $this->productRepository->productlist();
+        return response()->json($products);
     }
 
-    public function update(Request $request, $id)
+    public function store(ProductRequest $request)
     {
-        $validator = Validator::make($request->all(),[
-            'name' => 'required',
-            'quantity' => 'required|integer|min:0'
-        ], [
-            'name.required' => 'Insira um nome',
-            'quantity.required' => 'Insira uma quantidade',
-            'quantity.integer' => 'Quantidade deve ser inteira',
-            'quantity.min' => 'Quantidade deve ser positiva',
-        ]);
+        $validator = $request->validated();
+        return $this->productRepository->create($request->all(), 409);
+    }
 
-        if($validator->fails())
-            return response()->json($validator->messages(), 406);
-            //return response($validator->messages(), 406);
-        else 
-            return $this->productRepository->update($request->all(), $id);
+    public function show($name)
+    {
+        $products = $this->productRepository->show($name);
+        return response()->json($products);
+    }
+
+    public function update(ProductRequest $request, $id)
+    {
+        $validator = $request->validated();
+        return $this->productRepository->update($request->all(), $id);
     }
 
     public function destroy($id)

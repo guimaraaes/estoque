@@ -19,7 +19,13 @@ class UserController extends Controller
     public function index()
     {
         $users = $this->userRepository->all();
-        return response()->json([$users->toArray()]);
+        return response()->json([$users]);      
+    }
+
+    public function show($name)
+    {
+        $users = $this->userRepository->show($name);
+        return response()->json($users);   
     }
 
     public function destroy($id)

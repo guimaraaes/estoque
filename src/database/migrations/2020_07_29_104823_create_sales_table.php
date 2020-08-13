@@ -17,8 +17,6 @@ class CreateSalesTable extends Migration
             $table->increments('id')->autoIncrement();
             $table->integer('id_product');
             $table->foreign('id_product')->references('id')->on('products');
-            // $table->integer('id_user');
-            // $table->foreign('id_user')->references('id')->on('users');
             $table->string('name_client')->nullable();
             $table->string('cpf_client')->nullable();
             $table->integer('quantitysale');

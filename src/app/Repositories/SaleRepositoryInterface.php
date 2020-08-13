@@ -5,5 +5,6 @@ interface SaleRepositoryInterface
 {
    public function all();
    public function create(array $attributes);
+   public function show($name);
 
 }

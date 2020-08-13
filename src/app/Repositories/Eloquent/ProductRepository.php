@@ -12,10 +12,9 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $this->model = $model;
     }
- 
-    public function all()
+
+    public function productAnalyze($products)
     {
-        $products = $this->model->orderBy('id', 'desc')->paginate(10);
         $sales = Sale::all();
         $sold = 0;
         foreach ($products as $uProduct) {
@@ -34,6 +33,18 @@ class ProductRepository implements ProductRepositoryInterface
         return $products;
     }
 
+ 
+    public function all()
+    {
+        $products = $this->model->orderBy('id', 'desc')->paginate(9);
+        return $this->productAnalyze($products);
+    }
+    public function productlist()
+    {
+        $products = $this->model->orderBy('id', 'desc')->get();
+        return $this->productAnalyze($products);
+    }
+
     public function create(array $attributes)
     {
         if ($this->model->where('name', $attributes['name'])->count() == 1){
@@ -47,7 +58,13 @@ class ProductRepository implements ProductRepositoryInterface
         } else {
             return $this->model->create($attributes);
         } 
-        return response('Produto cadastrado', 200);   
+        return response('Produto criado', 200);
+    }
+
+    public function show($name)
+    {
+        $products = $this->model->where('name', 'like', '%'. $name .'%')->get();
+        return $this->productAnalyze($products);
     }
 
     public function update(array $attributes, $id)
