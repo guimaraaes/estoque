@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Product;
 use App\Sale;
 use App\Repositories\ProductRepositoryInterface;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -16,24 +17,19 @@ class ProductRepository implements ProductRepositoryInterface
     public function productAnalyze($products)
     {
         $sales = Sale::all();
-        $sold = 0;
         foreach ($products as $uProduct) {
+            $uProduct['sold'] = 0;
+            $uProduct['alert'] = 0;
             foreach ($sales as $uSale) {
-                if($uSale['id_product'] == $uProduct['id']){
-                    $uProduct->sold = 1;
-                    $sold = 1;
-                } else if ($sold === 0)
-                    $uProduct->sold = 0;
+                if($uSale['id_product'] == $uProduct['id'])
+                    $uProduct['sold'] = 1;
             }
             if(($uProduct['quantitymin'] != null) && ($uProduct['quantitymin']>=$uProduct['quantity']) )
-                $uProduct->alert = 1;
-            else 
-                $uProduct->alert = 0;
+                $uProduct['alert'] = 1;                
         }
         return $products;
     }
 
- 
     public function all()
     {
         $products = $this->model->orderBy('id', 'desc')->paginate(9);
@@ -55,15 +51,22 @@ class ProductRepository implements ProductRepositoryInterface
             if (isset ($attributes['quantitymin']) && $attributes['quantitymin'] != null) {
                 $this->model->where('name',$attributes['name'])->update(['quantitymin' => $attributes['quantitymin']]);
             } 
+
+            $message = [
+                'message' => 'Produto já existe. Dados atualizados.'
+            ];
         } else {
-            return $this->model->create($attributes);
-        } 
-        return response('Produto criado', 200);
+            $this->model->create($attributes);
+            $message = [
+                'message' => 'Produto criado.'
+            ];
+        }
+        throw new HttpResponseException(response()->json($message, 201)); 
     }
 
     public function show($name)
     {
-        $products = $this->model->where('name', 'like', '%'. $name .'%')->get();
+        $products = $this->model->where('name', 'like', $name .'%')->get();
         return $this->productAnalyze($products);
     }
 
@@ -73,13 +76,20 @@ class ProductRepository implements ProductRepositoryInterface
                                                 'quantity' =>  $attributes['quantity'], 
                                                 'quantitymin' => $attributes['quantitymin']
                                             ]);
-        return response('Produto atualizado', 200);
+
+        $message = [
+            'message' => 'Produto atualizado.'
+        ];
+        throw new HttpResponseException(response()->json($message, 201)); 
     }
 
     public function destroy($id)
     {
         $this->model->destroy($id);
-        return response('Produto excluído', 200);
+        $message = [
+            'message' => 'Produto excluído.'
+        ];
+        throw new HttpResponseException(response()->json($message, 201));
     }
 
 }

@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Sale;
 use App\Product;
 use App\Repositories\SaleRepositoryInterface;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class SaleRepository implements SaleRepositoryInterface
 {
@@ -17,7 +18,7 @@ class SaleRepository implements SaleRepositoryInterface
     {
         $sales = $this->model->orderBy('id', 'desc')->paginate(12);
         foreach ($sales as $uSale) {
-            $uSale->id_product = Product::where('id',$uSale->id_product )->value('name');
+            $uSale->name_product = Product::where('id',$uSale->id_product )->value('name');
         }
         return $sales;
     }
@@ -29,16 +30,25 @@ class SaleRepository implements SaleRepositoryInterface
             $quantity = Product::where('id', $attributes['id_product'])->value('quantity');  
             $newquantity = $quantity - $attributes['quantitysale'];
             Product::where('id',$attributes['id_product'])->update(['quantity' => $newquantity]);
-            return response('Venda realizada', 200);
-        } else 
-            return response('Quantidade indisponível', 406);
-        
+
+            $message = [
+                'message' => 'Venda realizada'
+            ];
+            $cod = 201;
+
+        } else {
+            $message = [
+                'quantitysale' => 'Quantidade indisponível'
+            ];
+            $cod = 422;
+        }
+        throw new HttpResponseException(response()->json($message,$cod)); 
     }
 
     public function show($name)
     {
-        $sales = $this->model->where('name_client', 'like', '%'. $name .'%')
-                            ->orwhere('cpf_client', 'like', '%'. $name .'%')->get();
+        $sales = $this->model->where('name_client', 'like', $name .'%')
+                            ->orwhere('cpf_client', 'like', $name .'%')->get();
         return $sales;
     }
 
