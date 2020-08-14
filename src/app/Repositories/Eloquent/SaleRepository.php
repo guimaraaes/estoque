@@ -35,7 +35,6 @@ class SaleRepository implements SaleRepositoryInterface
                 'message' => 'Venda realizada'
             ];
             $cod = 201;
-
         } else {
             $message = [
                 'quantitysale' => 'Quantidade indisponível'
@@ -51,5 +50,4 @@ class SaleRepository implements SaleRepositoryInterface
                             ->orwhere('cpf_client', 'like', $name .'%')->get();
         return $sales;
     }
-
 }

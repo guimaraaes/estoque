@@ -9,7 +9,7 @@ use App\Http\Requests\AuthRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
+//use Tymon\JWTAuth\Exceptions\JWTException;
 
 use App\Repositories\AuthRepositoryInterface;
 
