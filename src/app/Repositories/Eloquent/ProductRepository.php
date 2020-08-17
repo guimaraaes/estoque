@@ -20,11 +20,10 @@ class ProductRepository implements ProductRepositoryInterface
         foreach ($products as $uProduct) {
             $uProduct['sold'] = 0;
             $uProduct['alert'] = 0;
-            foreach ($sales as $uSale) {
+            foreach ($sales as $uSale) 
                 if($uSale['id_product'] == $uProduct['id'])
                     $uProduct['sold'] = 1;
-            }
-            if(($uProduct['quantitymin'] != null) && ($uProduct['quantitymin']>=$uProduct['quantity']) )
+            if(($uProduct['quantitymin'] != null) && ($uProduct['quantitymin'] >= $uProduct['quantity']))
                 $uProduct['alert'] = 1;                
         }
         return $products;
@@ -35,6 +34,7 @@ class ProductRepository implements ProductRepositoryInterface
         $products = $this->model->orderBy('id', 'desc')->paginate(9);
         return $this->productAnalyze($products);
     }
+
     public function productlist()
     {
         $products = $this->model->orderBy('id', 'desc')->get();
@@ -48,18 +48,12 @@ class ProductRepository implements ProductRepositoryInterface
             $quantitymin = $this->model->where('name', $attributes['name'])->value('quantitymin');
             $newquantity = $quantity + $attributes['quantity'];
             $this->model->where('name',$attributes['name'])->update(['quantity' => $newquantity]);
-            if (isset ($attributes['quantitymin']) && $attributes['quantitymin'] != null) {
+            if (isset ($attributes['quantitymin']) && $attributes['quantitymin'] != null) 
                 $this->model->where('name',$attributes['name'])->update(['quantitymin' => $attributes['quantitymin']]);
-            } 
-
-            $message = [
-                'message' => 'Produto já existe. Dados atualizados.'
-            ];
+            $message = ['message' => 'Produto já existe. Dados atualizados.'];
         } else {
             $this->model->create($attributes);
-            $message = [
-                'message' => 'Produto criado.'
-            ];
+            $message = ['message' => 'Produto criado.'];
         }
         throw new HttpResponseException(response()->json($message, 201)); 
     }
@@ -76,19 +70,14 @@ class ProductRepository implements ProductRepositoryInterface
                                                 'quantity' =>  $attributes['quantity'], 
                                                 'quantitymin' => $attributes['quantitymin']
                                             ]);
-
-        $message = [
-            'message' => 'Produto atualizado.'
-        ];
+        $message = ['message' => 'Produto atualizado.'];
         throw new HttpResponseException(response()->json($message, 201)); 
     }
 
     public function destroy($id)
     {
         $this->model->destroy($id);
-        $message = [
-            'message' => 'Produto excluído.'
-        ];
+        $message = ['message' => 'Produto excluído.'];
         throw new HttpResponseException(response()->json($message, 201));
     }
 

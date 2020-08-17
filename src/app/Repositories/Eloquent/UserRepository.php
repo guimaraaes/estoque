@@ -27,15 +27,11 @@ class UserRepository implements UserRepositoryInterface
 
     public function destroy($id)
     {
-        if ($id == 1){
-            $message = [
-                'message' => 'Usuário não pode ser excluído.'
-            ];
-        } else {
+        if ($id == 1)
+            $message = ['message' => 'Usuário não pode ser excluído.'];
+        else {
             $this->model->destroy($id);
-            $message = [
-                'message' => 'Usuário excluído.'
-            ];
+            $message = ['message' => 'Usuário excluído.'];
         }
         throw new HttpResponseException(response()->json($message, 201)); 
     }

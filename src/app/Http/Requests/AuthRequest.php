@@ -25,25 +25,38 @@ class AuthRequest extends FormRequest
      */
     public function rules()
     {
+        if($this->input('register') == 1){
+            return [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8|confirmed'
+            ];
+        } 
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed'
+            'email' => 'required|email',
+            'password' => 'required'
         ];
     }
 
     public function messages()
     {
+        if($this->input('register') == 1){
+            return [
+                'name.required' => 'Insira um nome',
+                'name.max' => 'Senha deve ter no máximo 255 caracteres',
+                'email.required' => 'Insira um e-mail',
+                'email.email' => 'Insira o e-mail no formato de email@dominio.com',
+                'email.max' => 'Senha deve ter no máximo 255 caracteres',
+                'email.unique' => 'E-mail já cadastrado',
+                'password.required' => 'Insira uma senha',
+                'password.min' => 'Senha deve ter pelo menos 8 caracteres',
+                'password.confirmed' => 'Senhas devem ser iguais'
+            ];
+        } 
         return [
-            'name.required' => 'Insira um nome',
-            'name.max' => 'Senha deve ter no máximo 255 caracteres',
             'email.required' => 'Insira um e-mail',
             'email.email' => 'Insira o e-mail no formato de email@dominio.com',
-            'email.max' => 'Senha deve ter no máximo 255 caracteres',
-            'email.unique' => 'E-mail já cadastrado',
             'password.required' => 'Insira uma senha',
-            'password.min' => 'Senha deve ter pelo menos 8 caracteres',
-            'password.confirmed' => 'Senhas devem ser iguais'
         ];
     }
 
