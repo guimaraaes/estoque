@@ -25,7 +25,7 @@ class UserController extends Controller
     public function show($name)
     {
         $users = $this->userRepository->show($name);
-        return response()->json($users);   
+        return response()->json([$users]);   
     }
 
     public function destroy($id)

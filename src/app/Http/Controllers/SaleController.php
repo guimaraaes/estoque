@@ -29,6 +29,6 @@ class SaleController extends Controller
     public function show($name)
     {
         $sales = $this->saleRepository->show($name);
-        return response()->json($sales);    
+        return response()->json([$sales]);   
     }
 }

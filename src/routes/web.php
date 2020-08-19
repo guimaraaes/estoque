@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/login', 'AuthController@login');
+Route::get('/product/show-product-alert/{name?}','ProductController@show_products_alert');
 
-Route::group(['middleware' => 'auth.jwt'], function () {
+//Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/register', 'AuthController@register');
     Route::get('/report', 'ReportController@index');
     Route::resource('/user', 'UserController')->only(['index', 'show', 'destroy']);
@@ -25,7 +26,8 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/logout', 'AuthController@logout');
     Route::post('/refresh', 'AuthController@refresh');
     Route::get('/authUser', 'AuthController@getAuthUser');
-});
+
+//});
 
  
 

@@ -35,7 +35,13 @@ class ProductController extends Controller
     public function show($name)
     {
         $products = $this->productRepository->show($name);
-        return response()->json($products);
+        return response()->json([$products]);
+    }
+
+    public function show_products_alert($name = null)
+    {
+        $products = $this->productRepository->show_products_alert($name);
+        return response()->json([$products]);
     }
 
     public function update(ProductRequest $request, $id)

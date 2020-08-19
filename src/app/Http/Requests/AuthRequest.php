@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use JWTAuth;
 
 class AuthRequest extends FormRequest
 {
@@ -15,6 +16,13 @@ class AuthRequest extends FormRequest
      */
     public function authorize()
     {
+        if($this->input('register') == 1){
+            $user = JWTAuth::parseToken()->authenticate();
+            if ($user['email'] != 'estoque@gmail.com'){
+                $message = ['message' => 'Sem autorização para realizar cadastro de novos usuários.'];
+                throw new HttpResponseException(response()->json($message, 422)); 
+            }
+        }
         return true;
     }
 

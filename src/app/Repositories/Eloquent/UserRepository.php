@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\User;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use JWTAuth;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -21,18 +22,21 @@ class UserRepository implements UserRepositoryInterface
 
     public function show($name)
     {
-        $users = $this->model->where('name', 'like', $name .'%')->get();
+        $users = $this->model->where('name', 'like', '%'. $name .'%')->paginate(9);
         return $users;
     }
 
     public function destroy($id)
     {
-        if ($id == 1)
-            $message = ['message' => 'Usuário não pode ser excluído.'];
-        else {
+        $user = JWTAuth::parseToken()->authenticate();
+        if ($user['email'] != 'estoque@gmail.com' || $id == 1){
+            $message = ['message' => 'Sem autorização para excluir usuário.'];
+            $cod = 422;
+        } else {
             $this->model->destroy($id);
             $message = ['message' => 'Usuário excluído.'];
+            $cod = 201;
         }
-        throw new HttpResponseException(response()->json($message, 201)); 
+        throw new HttpResponseException(response()->json($message, $cod)); 
     }
 }

@@ -36,6 +36,6 @@ class AuthController extends Controller
  
     public function getAuthUser()
     {
-        return JWTAuth::parseToken()->authenticate();
+        return $this->authRepository->getAuthUser();
     }
 }

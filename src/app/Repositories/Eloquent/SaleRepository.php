@@ -39,8 +39,8 @@ class SaleRepository implements SaleRepositoryInterface
 
     public function show($name)
     {
-        $sales = $this->model->where('name_client', 'like', $name .'%')
-                            ->orwhere('cpf_client', 'like', $name .'%')->get();
+        $sales = $this->model->where('name_client', 'like', '%'. $name .'%')
+                            ->orwhere('cpf_client', 'like', '%'. $name .'%')->paginate(17);
         return $sales;
     }
 

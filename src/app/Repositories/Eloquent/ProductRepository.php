@@ -6,6 +6,9 @@ use App\Product;
 use App\Sale;
 use App\Repositories\ProductRepositoryInterface;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Pagination\LengthAwarePaginator ;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -60,8 +63,43 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function show($name)
     {
-        $products = $this->model->where('name', 'like', $name .'%')->get();
+        $products = $this->model->where('name', 'like', '%'. $name .'%')->paginate(9);
         return $this->productAnalyze($products);
+    }
+
+    public function show_products_alert($name)
+    {
+        $products = $this->model->orderBy('id', 'desc')->get();
+        if (isset($name))
+            $products = $this->model->where('name', 'like', '%'. $name .'%')->get();
+
+        $product = [];
+        foreach ($products as $uProduct) {
+            if(($uProduct['quantitymin'] != null) && ($uProduct['quantitymin'] >= $uProduct['quantity']))
+                array_push($product, $uProduct);
+        }
+
+        return  $this->paginate($this->productAnalyze($product));
+    }
+    
+    public function paginate($items, $perPage = 10, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        $lap = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return [
+            'current_page' => $lap->currentPage(),
+            'data' => $lap ->values(),
+            'first_page_url' => $lap ->url(1),
+            'from' => $lap->firstItem(),
+            'last_page' => $lap->lastPage(),
+            'last_page_url' => $lap->url($lap->lastPage()),
+            'next_page_url' => $lap->nextPageUrl(),
+            'per_page' => $lap->perPage(),
+            'prev_page_url' => $lap->previousPageUrl(),
+            'to' => $lap->lastItem(),
+            'total' => $lap->total(),
+        ];
     }
 
     public function update(array $attributes, $id)

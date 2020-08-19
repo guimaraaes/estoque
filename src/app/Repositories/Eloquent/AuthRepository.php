@@ -59,9 +59,9 @@ class AuthRepository implements AuthRepositoryInterface
         }
     }
 
-    public function getAuthUser(array $attributes)
+    public function getAuthUser()
     {
-        $user = JWTAuth::authenticate($attributes['token']);
+        $user = JWTAuth::parseToken()->authenticate();
         throw new HttpResponseException(response()->json($user)); 
     }
 }
