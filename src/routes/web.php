@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', 'AuthController@login');
 Route::get('/product/show-product-alert/{name?}','ProductController@show_products_alert');
 
-//Route::group(['middleware' => 'auth.jwt'], function () {
+// Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('/register', 'AuthController@register');
     Route::get('/report', 'ReportController@index');
-    Route::resource('/user', 'UserController')->only(['index', 'show', 'destroy']);
+    Route::resource('/user', 'UserController')->only(['index', 'show', 'update', 'destroy']);
     Route::resource('/sale', 'SaleController')->only(['index', 'show', 'store']);
     Route::resource('/product', 'ProductController')->only(['index', 'store', 'show', 'update', 'destroy']);
     Route::get('/productlist', 'ProductController@productlist');
@@ -27,7 +27,7 @@ Route::get('/product/show-product-alert/{name?}','ProductController@show_product
     Route::post('/refresh', 'AuthController@refresh');
     Route::get('/authUser', 'AuthController@getAuthUser');
 
-//});
+// });
 
  
 

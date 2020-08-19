@@ -41,6 +41,8 @@ class SaleRepository implements SaleRepositoryInterface
     {
         $sales = $this->model->where('name_client', 'like', '%'. $name .'%')
                             ->orwhere('cpf_client', 'like', '%'. $name .'%')->paginate(17);
+        foreach ($sales as $uSale) 
+            $uSale->name_product = Product::where('id',$uSale->id_product )->value('name');
         return $sales;
     }
 

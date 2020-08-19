@@ -5,6 +5,7 @@ interface UserRepositoryInterface
 {
    public function all();
    public function show($name);
+   public function update(array $attributes, $id);
    public function destroy($id);
 
 }

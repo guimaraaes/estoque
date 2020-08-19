@@ -24,12 +24,28 @@ class UserRepository implements UserRepositoryInterface
     {
         $users = $this->model->where('name', 'like', '%'. $name .'%')->paginate(9);
         return $users;
+    } 
+
+    public function update(array $attributes, $id)
+    {
+        $user = JWTAuth::parseToken()->authenticate();
+        if ($user['id'] == $id){
+            $this->model->where('id', $id)->update([ 'name' => $attributes['name'], 
+                                                     'password' => bcrypt($attributes['password'])
+                                                     ]);
+            $message = ['message' => 'Dados atualizado.'];
+            $cod = 201;
+        } else {
+            $message = ['message' => 'Sem autorização para atualizar os dados.'];
+            $cod = 422;
+        }
+        throw new HttpResponseException(response()->json($message, $cod)); 
     }
 
     public function destroy($id)
     {
         $user = JWTAuth::parseToken()->authenticate();
-        if ($user['email'] != 'estoque@gmail.com' || $id == 1){
+        if ($user['id'] != 1 || $id == 1){
             $message = ['message' => 'Sem autorização para excluir usuário.'];
             $cod = 422;
         } else {

@@ -46,6 +46,8 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function create(array $attributes)
     {
+        //verificar se o usuário utilizou um select no form de cadastrar produto e atualizar as informaçoes
+        //if (isset($attributes['id'])){
         if ($this->model->where('name', $attributes['name'])->count() == 1){
             $quantity = $this->model->where('name', $attributes['name'])->value('quantity');
             $quantitymin = $this->model->where('name', $attributes['name'])->value('quantitymin');
@@ -82,7 +84,7 @@ class ProductRepository implements ProductRepositoryInterface
         return  $this->paginate($this->productAnalyze($product));
     }
     
-    public function paginate($items, $perPage = 10, $page = null, $options = [])
+    public function paginate($items, $perPage = 9, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
