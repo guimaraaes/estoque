@@ -28,7 +28,6 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        $validator = $request->validated();
         return $this->productRepository->create($request->all(), 409);
     }
 
@@ -46,7 +45,6 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, $id)
     {
-        $validator = $request->validated();
         return $this->productRepository->update($request->all(), $id);
     }
 

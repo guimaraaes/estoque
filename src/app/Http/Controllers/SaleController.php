@@ -22,7 +22,6 @@ class SaleController extends Controller
 
     public function store(SaleRequest $request)
     {
-        $validator = $request->validated();
         return $this->saleRepository->create($request->all());
     }
 

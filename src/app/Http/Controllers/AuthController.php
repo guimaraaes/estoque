@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
+use App\Http\Requests\RegisterRequest;
+
 use App\Http\Controllers\Controller;
-use JWTAuth;
+
 use App\Repositories\AuthRepositoryInterface;
 
 
@@ -17,15 +19,13 @@ class AuthController extends Controller
         $this->authRepository = $authRepository;
     }
     
-    public function register(AuthRequest $request)
+    public function register(RegisterRequest $request)
     {
-        $validator = $request->validated();
         return $this->authRepository->register($request->only('name', 'email', 'password'));
     }
  
     public function login(AuthRequest $request)
     {
-        $validator = $request->validated();
         return $this->authRepository->login($request->only('email', 'password'));
     }
  

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
+use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\UserRepositoryInterface;
@@ -28,9 +29,8 @@ class UserController extends Controller
         return response()->json([$users]);   
     }
 
-    public function update(AuthRequest $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
-        $validator = $request->validated();
         return $this->userRepository->update($request->all(), $id);
     }
 

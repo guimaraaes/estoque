@@ -29,15 +29,19 @@ class UserRepository implements UserRepositoryInterface
     public function update(array $attributes, $id)
     {
         $user = JWTAuth::parseToken()->authenticate();
-        if ($user['id'] == $id){
-            $this->model->where('id', $id)->update([ 'name' => $attributes['name'], 
-                                                     'password' => bcrypt($attributes['password'])
-                                                     ]);
+
+        if ($user['id'] != $id){
+            $message = ['message' => 'Sem autorização para realizar cadastro de novos usuários.'];
+            $cod = 422;
+        } else {
+            if ($user['email'] != $attributes['email'])
+                $this->model->where('id', $id)->update([ 'email' => $attributes['email'] ]);
+            
+            $this->model->where('id', $id)->update([ 'name' => $attributes['name'],
+                                                    'password' => bcrypt($attributes['password'])
+            ]);
             $message = ['message' => 'Dados atualizado.'];
             $cod = 201;
-        } else {
-            $message = ['message' => 'Sem autorização para atualizar os dados.'];
-            $cod = 422;
         }
         throw new HttpResponseException(response()->json($message, $cod)); 
     }
